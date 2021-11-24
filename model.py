@@ -93,25 +93,12 @@ class MyModel(torch.nn.Module):
             torch.nn.MaxPool2d(kernel_size=(2, 2), stride=1),
         )
 
-        self.fc1 = torch.nn.Linear(1, 64)
-        self.fc2 = torch.nn.Linear(1, 64)
-        self.fc3 = torch.nn.Linear(1, 64)
-        self.fc4 = torch.nn.Linear(1, 64)
-        self.fc5 = torch.nn.Linear(1, 64)
-
-        self.fc = torch.nn.Linear(1, class_num)
+        self.fc = torch.nn.Linear(6480000, class_num)
 
     def forward(self, x):
         x = self.block1(x)
-        x1 = x.view(x.size(0), -1)
-        print(x1.size())
-        x1 = self.fc1(x1)
 
         x = self.block2(x)
-        x2 = x.view(x.size(0), -1)
-        print(x2.size())
-        x2 = self.fc2(x2)
-        x2 = torch.cat([x1, x2], dim=1)
 
         x = self.block3(x)
 
@@ -120,8 +107,6 @@ class MyModel(torch.nn.Module):
         x = self.block5(x)
 
         x = x.view(x.size(0), -1)
-        print(x.size())
-        x = torch.cat([x2, x], dim=1)
         x = self.fc(x)
 
         return x
